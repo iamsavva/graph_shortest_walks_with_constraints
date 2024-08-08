@@ -103,7 +103,7 @@ class DualVertex:
         """
         Defining indeterminates for x and flow-in violation polynomial, if necesary
         """
-        self.J = prog.NewContinuousVariables(1, "J_" + self.name)[0]
+        self.J = prog.NewContinuousVariables(1, "J" + self.name)[0]
         if self.vertex_is_target:
             prog.AddLinearConstraint(self.J == 0)
         else:
@@ -282,7 +282,8 @@ class PolynomialDualGCS:
     
     def flow_over_edges_at_least_this(self, edges:T.List[DualEdge], flow: int = 1):
         # at least this -- negative edge penalty, max positive cost, min negative 
-        h = self.prog.NewContinuousVariables(1)[0]
+        h = self.prog.NewContinuousVariables(1, "h")[0]
+        self.prog.AddLinearConstraint(h >= 0)
         for edge in edges:
             edge.add_edge_penalty(h, False)
 
